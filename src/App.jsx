@@ -1,45 +1,21 @@
-import { useState, useEffect } from "react";
-import './style.css';
-import {animesData} from './assets/assets.js'
-import Navbar from './container/Navbar.jsx'
-import AnimeLists from './container/AnimeLists.jsx'
-import AnimeDetails from './container/AnimeDetails.jsx'
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer.jsx";
+import Home from "./pages/Home.jsx";
+import AnimeDetails from "./components/AnimeDetails.jsx";
+import "./style.css"
 
-
-export default function App() {
-  const [search, setSearch] = useState('');
-  const [selectedAnime, setSelectedAnime] = useState(null);
-
-  const filteredAnimes = animesData.filter((anime) =>
-    anime.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  
-  useEffect(() => {
-    setSelectedAnime(animesData[0]);
-  }, []);
-
-  const handleSearch = (anime) => setSearch(anime);
-
-  const handleSelectAnime = (anime) => setSelectedAnime(anime)
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar animeQuery={handleSearch} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <AnimeLists
-              animesData={filteredAnimes}
-              searchQuery={search}
-              onSelect={handleSelectAnime}
-            />
-          </div>
-          <div className="lg:col-span-1">
-            {selectedAnime && <AnimeDetails anime={selectedAnime} />}
-          </div>
-        </div>
-      </div>
+export default function App(){
+  return(
+    <div className="min-h-screen bg-main text-bright flex flex-col">
+      <Navbar />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="/anime-details/:id" element={<AnimeDetails/>} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
-  );
+  )
 }
