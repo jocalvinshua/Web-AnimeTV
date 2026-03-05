@@ -16,6 +16,8 @@ export default function AnimeDetails() {
         const response = await fetch(`https://api.jikan.moe/v4/anime/${animeId}/full`);
         const json = await response.json();
         setAnime(json.data);
+
+        return document.title = `${anime.title} | AnimeTV`
       } catch (error) {
         console.error("Gagal mengambil detail anime:", error);
       } finally {
