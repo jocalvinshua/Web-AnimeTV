@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 // Menerima data dan isLoading dari Home.jsx
 const Carousel = ({ data = [], isLoading }) => {
@@ -82,8 +83,12 @@ const Carousel = ({ data = [], isLoading }) => {
                 </p>
 
                 <div className="flex items-center pt-4">
-                  <button className="flex items-center group/btn shadow-xl active:scale-95 transition-transform">
-                    <span className="bg-primary hover:bg-primary-dark text-white px-6 py-3 font-black text-xs md:text-sm tracking-widest uppercase transition-colors rounded-l-xl">
+                  {/* Gunakan Link sebagai pembungkus utama agar SEO-friendly dan fungsional */}
+                  <Link 
+                    to={`/anime-details/${slide.id}`} 
+                    className="flex items-center group/btn shadow-xl active:scale-95 transition-transform"
+                  >
+                    <span className="bg-primary group-hover/btn:bg-primary-dark text-white px-6 py-3 font-black text-xs md:text-sm tracking-widest uppercase transition-colors rounded-l-xl">
                       Lihat Detail
                     </span>
                     <span className="bg-primary-dark p-3 md:p-3.5 rounded-r-xl transition-colors">
@@ -91,7 +96,7 @@ const Carousel = ({ data = [], isLoading }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
