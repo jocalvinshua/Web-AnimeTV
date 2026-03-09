@@ -4,6 +4,7 @@ import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import AnimeDetails from "./components/AnimeDetails.jsx";
 import "./style.css"
+import Anime from "./pages/Anime.jsx";
 
 export default function App(){
   return(
@@ -13,6 +14,7 @@ export default function App(){
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/anime-details/:id" element={<AnimeDetails/>} />
+          <Route path="/anime/:query" element={<Anime />} />
         </Routes>
       </main>
       <Footer />
