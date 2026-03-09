@@ -11,8 +11,8 @@ export default function Navbar() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (search.trim()) {
-      // Navigasi ke rute search dengan query parameter
-      navigate(`/search?q=${encodeURIComponent(search)}`);
+      // navigate(`/search?q=${encodeURIComponent(search)}`);
+      navigate(`/anime/${search}`)
       // Tutup modal dan reset input
       setIsSearchOpen(false);
       setSearch("");
