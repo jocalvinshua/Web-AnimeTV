@@ -14,7 +14,11 @@ export default function App(){
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/anime-details/:id" element={<AnimeDetails/>} />
-          <Route path="/anime/:query" element={<Anime />} />
+          <Route path="/anime/genre/:genreId/:genreName" element={<Anime />} />
+          <Route path="/anime/season/:season" element={<Anime />} />
+          
+          {/* Tambahkan tanda ? agar :query bersifat opsional */}
+          <Route path="/anime/:query?" element={<Anime />} />
         </Routes>
       </main>
       <Footer />

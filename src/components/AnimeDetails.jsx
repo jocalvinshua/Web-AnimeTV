@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Star, Clock, Calendar, ChevronLeft, PlayCircle } from "lucide-react";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
@@ -7,6 +7,11 @@ export default function AnimeDetails() {
   const { id } = useParams();
   const animeId = id || 21; 
   const { data: anime, loading: animeDetailLoading } = useFetchAnime(`anime/${animeId}/full`);
+  const navigate = useNavigate()
+  
+  const handleGenreList = (genreId, genreName) => {
+    navigate(`/anime/genre/${genreId}/${genreName}`);
+  };
 
   useEffect(() => {
     if (anime && anime.title) {
@@ -63,7 +68,7 @@ export default function AnimeDetails() {
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               {anime.genres?.map((genre) => (
-                <span key={genre.mal_id} className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter">
+                <span onClick={()=>handleGenreList(genre.mal_id, genre.name)} key={genre.mal_id} className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter">
                   {genre.name}
                 </span>
               ))}

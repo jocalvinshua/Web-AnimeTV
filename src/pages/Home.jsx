@@ -13,7 +13,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-bright font-sans">
-      {/* Kirim data dan status loading ke Carousel */}
       <Carousel data={carouselAnime} isLoading={loadingTop} />
 
       <main className="max-w-[1440px] mx-auto px-6 md:px-16 xl:px-20 py-10">

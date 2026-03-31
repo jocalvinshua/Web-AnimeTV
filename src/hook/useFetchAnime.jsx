@@ -12,6 +12,7 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setData([]);
 
     try {
       if (delay > 0) {
