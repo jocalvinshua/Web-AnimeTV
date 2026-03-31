@@ -1,3 +1,4 @@
+// src/hook/useFetchAnime.js
 import { useState, useEffect, useCallback } from 'react';
 
 export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
@@ -6,13 +7,22 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const queryString = new URLSearchParams(params).toString();
-  const url = `https://api.jikan.moe/v4/${endpoint}${queryString ? `?${queryString}` : ''}`;
+  // Daftar ID genre yang diblokir
+  const BANNED_GENRES = [9, 12, 49, 28, 26];
 
   const fetchData = useCallback(async () => {
+    if (!endpoint) return;
+    
     setLoading(true);
-    setError(null);
     setData([]);
+
+    const finalParams = {
+      ...params,
+      genres_exclude: BANNED_GENRES.join(',') 
+    };
+
+    const queryString = new URLSearchParams(finalParams).toString();
+    const url = `https://api.jikan.moe/v4/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
     try {
       if (delay > 0) {
@@ -20,13 +30,9 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
       }
 
       const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
 
       const json = await response.json();
-      
       setData(json.data || []);
       setPagination(json.pagination || null);
     } catch (err) {
@@ -34,10 +40,11 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
     } finally {
       setLoading(false);
     }
-  }, [url, delay]);
+  }, [endpoint, JSON.stringify(params), delay]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  return { data, pagination, loading, error, refetch: fetchData };
+
+  return { data, pagination, loading, error };
 };
