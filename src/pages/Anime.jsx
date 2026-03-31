@@ -1,24 +1,20 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import AnimeCard from "../components/AnimeCard";
 import { useFetchAnime } from "../hook/useFetchAnime";
+import Pagination from "../components/Pagination";
 
 export default function Anime() {
+  const [searchParams] = useSearchParams();
+  const currentPage = searchParams.get("page") || 1;
   const { query } = useParams();
 
-  const { data: animeSearch, loading } = useFetchAnime(`anime?q=${query}&limit=20`);
+  const { data: animeSearch, loading, pagination } = useFetchAnime(`anime`,{
+    q: query,
+    page: currentPage
+  });
 
   return (
     <div className="min-h-screen px-4 md:px-12 lg:px-24 py-10">
-      {/* Header Info */}
-      <div className="mb-10">
-        <h2 className="text-xl md:text-2xl font-bold uppercase tracking-tight">
-          Search Results for: <span className="text-primary">"{query}"</span>
-        </h2>
-        {!loading && animeSearch?.length > 0 && (
-          <p className="text-muted text-sm mt-2">Found {animeSearch.length} titles</p>
-        )}
-      </div>
-
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-startr">
           {Array(10).fill(0).map((_, i) => (
@@ -40,6 +36,9 @@ export default function Anime() {
           <p className="text-muted mt-2">Try searching with different keywords.</p>
         </div>
       )}
+      <div className="mt-10 justify-center flex flex-col-1 items-center">
+        <Pagination lastPage={pagination?.last_visible_page || 1} />
+      </div>
     </div>
   );
 }

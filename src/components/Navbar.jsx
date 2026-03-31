@@ -12,7 +12,6 @@ export default function Navbar() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (search.trim()) {
-      // navigate(`/search?q=${encodeURIComponent(search)}`);
       navigate(`/anime/${search}`)
       // Tutup modal dan reset input
       setIsSearchOpen(false);

@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 
 export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
   const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Mengubah object params menjadi string query (ex: ?limit=5&q=naruto)
   const queryString = new URLSearchParams(params).toString();
   const url = `https://api.jikan.moe/v4/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
@@ -21,14 +21,15 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
       const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        throw new Error(`Error: ${response.status}`);
       }
 
       const json = await response.json();
+      
       setData(json.data || []);
+      setPagination(json.pagination || null);
     } catch (err) {
       setError(err.message);
-      console.error("Jikan Hook Error:", err);
     } finally {
       setLoading(false);
     }
@@ -37,6 +38,5 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  return { data, loading, error, refetch: fetchData };
+  return { data, pagination, loading, error, refetch: fetchData };
 };
