@@ -20,6 +20,7 @@
   .text-bright { color: var(--color-bright); }
   .text-muted { color: var(--color-muted); }
   .border-primary { border-color: var(--color-primary); }
+  .bg-muted {background-color: var(--color-muted);}
 }
 
 /* Smooth Scrolling for the whole app */

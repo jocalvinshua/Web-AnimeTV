@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 export default function Pagination({ lastPage }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,12 +36,17 @@ export default function Pagination({ lastPage }) {
         
         <button 
           disabled={currentPage === 1}
+          onClick={() => handlePagination(1)}
+          className="rounded-full hover:bg-white/10 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+        >
+          <ChevronsLeft width={30} height={30} color="currentColor" />
+        </button>
+        <button 
+          disabled={currentPage === 1}
           onClick={() => handlePagination(currentPage - 1)}
           className="rounded-full hover:bg-white/10 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
         >
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <path d="M22.499 12.85a.9.9 0 0 1 .57.205l.067.06a.9.9 0 0 1 .06 1.206l-.06.066-5.585 5.586-.028.027.028.027 5.585 5.587a.9.9 0 0 1 .06 1.207l-.06.066-1.207.06l-.066-.06-6.25-6.25a1 1 0 0 1-.158-.212l-.038-.08a.9.9 0 0 1-.03-.606l.03-.083a1 1 0 0 1 .137-.226l.06-.066 6.25-6.25a.9.9 0 0 1 .635-.263Z" fill="currentColor"/>
-          </svg>
+          <ChevronLeft width={30} height={30} color="currentColor" />
         </button>
 
         <div className="flex items-center gap-1 md:gap-2 text-sm font-medium">
@@ -65,9 +71,14 @@ export default function Pagination({ lastPage }) {
           onClick={() => handlePagination(currentPage + 1)}
           className="rounded-full hover:bg-white/10 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
         >
-          <svg className="rotate-180" width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <path d="M22.499 12.85a.9.9 0 0 1 .57.205l.067.06a.9.9 0 0 1 .06 1.206l-.06.066-5.585 5.586-.028.027.028.027 5.585 5.587a.9.9 0 0 1 .06 1.207l-.06.066-1.207.06l-.066-.06-6.25-6.25a1 1 0 0 1-.158-.212l-.038-.08a.9.9 0 0 1-.03-.606l.03-.083a1 1 0 0 1 .137-.226l.06-.066 6.25-6.25a.9.9 0 0 1 .635-.263Z" fill="currentColor"/>
-          </svg>
+          <ChevronRight width={30} height={30} color="currentColor" />
+        </button>
+        <button 
+          disabled={currentPage === lastPage}
+          onClick={() => handlePagination(lastPage)}
+          className="rounded-full hover:bg-white/10 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+        >
+          <ChevronsRight width={30} height={30} color="currentColor" />
         </button>
       </div>
     </div>

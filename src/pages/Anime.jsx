@@ -4,14 +4,19 @@ import { useFetchAnime } from "../hook/useFetchAnime";
 import Pagination from "../components/Pagination";
 
 export default function Anime() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { query, genreId, genreName, season } = useParams();
   const currentPage = searchParams.get("page") || 1;
+  const orderBy = searchParams.get("order_by"); // Ambil dari URL
+  const sortDir = searchParams.get("sort");     // Ambil dari URL
 
   const fetchParams = {
     page: currentPage,
     limit: 24,
   };
+
+  if (orderBy) fetchParams.order_by = orderBy;
+  if (sortDir) fetchParams.sort = sortDir;
 
   let endpoint = 'anime'
   if (genreId) {
@@ -21,6 +26,21 @@ export default function Anime() {
   } else if (season){
     endpoint = `seasons/${season}`
   }
+
+  const handleSort = (sortBy) => {
+    const newParams = new URLSearchParams(searchParams);
+    
+    if (sortBy === 'rating') {
+      newParams.set("order_by", "score");
+      newParams.set("sort", "desc");
+    } else {
+      newParams.delete("order_by");
+      newParams.delete("sort");
+    }
+
+    newParams.set("page", "1"); 
+    setSearchParams(newParams);
+  };
 
   const { data: animeSearch, loading, pagination } = useFetchAnime(endpoint, fetchParams);
 
@@ -35,6 +55,7 @@ export default function Anime() {
   return (
     <div className="min-h-screen px-4 md:px-12 lg:px-24 py-10">
       {loading ? (
+        // Skeleton Card
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-startr">
           {Array(10).fill(0).map((_, i) => (
             <AnimeCard key={i} isLoading={true} />
@@ -42,6 +63,7 @@ export default function Anime() {
         </div>
       ) : animeSearch && animeSearch.length > 0 ? (
         <>
+        {/* Results */}
           <div>
             <h2 className="text-2xl font-bold mb-1 uppercase tracking-tight">
               {getPageTitle()}
@@ -49,6 +71,15 @@ export default function Anime() {
             <p className="text-muted text-sm mb-6">
               {pagination?.items?.total || 0} results found
             </p>
+          </div>
+          <div className="flex flex-col items-center justify-items-center gap-2">
+            {/* Sorting Button */}
+            <button
+              onClick={()=>handleSort('rating')}
+              className="bg-white/10 hover:bg-white/20 text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mb-10"
+            >
+              By Ratings
+            </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-start">
             {animeSearch.map((anime) => (
