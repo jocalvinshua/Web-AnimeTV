@@ -3,26 +3,24 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Star, Clock, Calendar, ChevronLeft, PlayCircle } from "lucide-react";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
+const BANNED_GENRES = [9,12,49,28,26]
 export default function AnimeDetails() {
   const { id } = useParams();
   const animeId = id || 21; 
   const { data: anime, loading: animeDetailLoading } = useFetchAnime(`anime/${animeId}/full`);
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const handleGenreList = (genreId, genreName) => {
-    navigate(`/anime/genre/${genreId}/${genreName}`);
+    navigate(`/anime/genre/${genreId}/${genreName.toLowerCase()}`);
   };
 
   useEffect(() => {
-    if (anime && anime.title) {
+    if (anime?.title) {
       document.title = `${anime.title} | AnimeTV`;
     }
-    return () => {
-      document.title = "AnimeTV";
-    };
+    return () => { document.title = "AnimeTV"; };
   }, [anime]);
 
-  // Handle Loading State
   if (animeDetailLoading) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -33,6 +31,7 @@ export default function AnimeDetails() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Tombol Back */}
       <Link to="/" className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 group font-bold uppercase text-xs tracking-widest">
         <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         Back to Home
@@ -61,14 +60,36 @@ export default function AnimeDetails() {
               <p className="text-[10px] text-muted uppercase tracking-wider font-bold">Duration</p>
             </div>
           </div>
+          {/* Bagian Status & Aired Date (Penambahan Baru) */}
+          <div className=" mt-4 flex flex-col gap-1 p-4 bg-white/5 rounded-xl border border-white/5">
+            <div className="flex items-center gap-2 text-primary">
+               <Calendar size={16} />
+               <p className="text-xs font-black uppercase tracking-widest">Aired Information</p>
+            </div>
+            <p className="text-sm font-medium">
+              <span className="text-muted">Status:</span> {anime.status}
+            </p>
+            {!anime.airing && (
+               <p className="text-sm font-medium">
+                 <span className="text-muted">Aired:</span> {anime.aired?.string || "Unknown"}
+               </p>
+            )}
+          </div>
         </div>
 
         {/* Kolom Detail (Kanan) */}
         <div className="flex-1 space-y-8">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              {anime.genres?.map((genre) => (
-                <span onClick={()=>handleGenreList(genre.mal_id, genre.name)} key={genre.mal_id} className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter">
+              {/* FILTER GENRE GLOBAL */}
+              {anime.genres
+                ?.filter(g => !BANNED_GENRES.includes(g.mal_id))
+                .map((genre) => (
+                <span 
+                  onClick={() => handleGenreList(genre.mal_id, genre.name)} 
+                  key={genre.mal_id} 
+                  className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
+                >
                   {genre.name}
                 </span>
               ))}
@@ -80,12 +101,12 @@ export default function AnimeDetails() {
           {/* Sinopsis */}
           <div className="space-y-3">
             <h3 className="text-xl font-bold border-l-4 border-primary pl-4 uppercase tracking-wider">Synopsis</h3>
-            <p className="text-muted leading-relaxed text-justify md:text-left text-sm md:text-base">
+            <p className="text-muted leading-relaxed text-justify md:text-left text-sm md:text-base italic">
               {anime.synopsis || "No synopsis available for this title."}
             </p>
           </div>
 
-          {/* --- VIDEO TRAILER SECTION --- */}
+          {/* Video Trailer */}
           {anime.trailer?.embed_url && (
             <div className="pt-4 space-y-4">
               <h3 className="text-xl font-bold flex items-center gap-2 uppercase tracking-wider">

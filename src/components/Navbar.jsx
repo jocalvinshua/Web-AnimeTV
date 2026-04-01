@@ -40,6 +40,7 @@ export default function Navbar() {
             Genres
           </NavLink>
           <NavLink to="/anime/seasons" className="text-bright hover:text-primary transition-colors">Season</NavLink>
+          <NavLink to="/anime/top" className="text-bright hover:text-primary transition-colors">Top Anime</NavLink>
         </div>
         <div className="flex items-center gap-4 flex-1 justify-end max-w-xl">
           

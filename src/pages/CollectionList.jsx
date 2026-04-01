@@ -4,8 +4,7 @@ import { Folder, CalendarDays } from "lucide-react";
 
 export default function CollectionList({ type }) {
   const navigate = useNavigate();
-  
-  // Endpoint dinamis: 'genres/anime' atau 'seasons'
+
   const endpoint = type === "genres" ? "genres/anime" : "seasons";
   const { data: tagList, loading } = useFetchAnime(endpoint);
 

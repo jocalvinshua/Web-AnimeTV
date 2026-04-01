@@ -27,6 +27,8 @@ export default function Anime() {
     endpoint = `seasons/${season}`
   } else if (season){
     endpoint = `seasons/${year}/${season}`
+  } else if(top){
+    endpoint = 'top/anime'
   }
 
   const handleSort = (sortBy) => {
@@ -38,7 +40,7 @@ export default function Anime() {
         break;
       case 'popularity':
         newParams.set("order_by", "popularity")
-        newParams.set("sort", "desc")
+        newParams.set("sort", "asc")
         break;
       case 'latest':
         newParams.set('order_by', 'start_date')
@@ -83,13 +85,26 @@ export default function Anime() {
               {pagination?.items?.total || 0} results found
             </p>
           </div>
-          <div className="flex flex-col items-center justify-items-center gap-2">
-            {/* Sorting Button */}
+
+          {/* Sorting Button */}
+          <div className="flex flex-wrap flex-col-1 items-center justify-items-center gap-2">
             <button
               onClick={()=>handleSort('rating')}
               className="bg-white/10 hover:bg-white/20 text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mb-10"
             >
               By Ratings
+            </button>
+            <button
+              onClick={()=>handleSort('latest')}
+              className="bg-white/10 hover:bg-white/20 text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mb-10"
+            >
+              Latest
+            </button>
+            <button
+              onClick={()=>handleSort('popularity')}
+              className="bg-white/10 hover:bg-white/20 text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mb-10"
+            >
+              Popularity
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-start">
@@ -97,6 +112,9 @@ export default function Anime() {
               <AnimeCard key={anime.mal_id} anime={anime} isLoading={false} />
             ))}
           </div>
+            <div className="mt-10 justify-center flex flex-col-1 items-center">
+              <Pagination lastPage={pagination?.last_visible_page || 1} />
+            </div>
         </>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -109,9 +127,7 @@ export default function Anime() {
           <p className="text-muted mt-2">Try searching with different keywords.</p>
         </div>
       )}
-      <div className="mt-10 justify-center flex flex-col-1 items-center">
-        <Pagination lastPage={pagination?.last_visible_page || 1} />
-      </div>
+      
     </div>
   );
 }

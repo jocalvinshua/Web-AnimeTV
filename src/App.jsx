@@ -18,13 +18,14 @@ export default function App(){
           <Route path="/anime/genre/:genreId/:genreName" element={<Anime />} />
           <Route path="/anime/season/:season" element={<Anime />} />
           <Route path="/anime/season/:year/:season" element={<Anime />} />
+          <Route path="/anime/top" element={<Anime />} />
           
           {/* Tambahkan tanda ? agar :query bersifat opsional */}
           <Route path="/anime/:query?" element={<Anime />} />
 
           {/* Route handling tag */}
           <Route path="/anime/seasons" element={<CollectionList type="seasons" />} />
-          <Route path="/anime/genres" element={<CollectionList />} />
+          <Route path="/anime/genres" element={<CollectionList type="genres" />} />
         </Routes>
       </main>
       <Footer />
