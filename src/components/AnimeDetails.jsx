@@ -6,6 +6,7 @@ import { useFetchAnime } from "../hook/useFetchAnime";
 export default function AnimeDetails() {
   const { id } = useParams();
   const animeId = id || 21; 
+  // Hook useFetchAnime sudah menangani ?sfw secara global
   const { data: anime, loading: animeDetailLoading } = useFetchAnime(`anime/${animeId}/full`);
   const navigate = useNavigate();
 
@@ -30,14 +31,12 @@ export default function AnimeDetails() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Tombol Back */}
       <Link to="/" className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 group font-bold uppercase text-xs tracking-widest">
         <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         Back to Home
       </Link>
 
       <article className="flex flex-col md:flex-row gap-10 items-start mb-16">
-        {/* Kolom Poster (Kiri) */}
         <div className="w-full md:w-1/3 md:sticky md:top-24">
           <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
             <img 
@@ -59,8 +58,8 @@ export default function AnimeDetails() {
               <p className="text-[10px] text-muted uppercase tracking-wider font-bold">Duration</p>
             </div>
           </div>
-          {/* Bagian Status & Aired Date (Penambahan Baru) */}
-          <div className=" mt-4 flex flex-col gap-1 p-4 bg-white/5 rounded-xl border border-white/5">
+
+          <div className="mt-4 flex flex-col gap-1 p-4 bg-white/5 rounded-xl border border-white/5">
             <div className="flex items-center gap-2 text-primary">
                <Calendar size={16} />
                <p className="text-xs font-black uppercase tracking-widest">Aired Information</p>
@@ -76,23 +75,24 @@ export default function AnimeDetails() {
           </div>
         </div>
 
-        {/* Kolom Detail (Kanan) */}
         <div className="flex-1 space-y-8">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span 
-                onClick={() => handleGenreList(genre.mal_id, genre.name)} 
-                key={genre.mal_id} 
-                className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
-              >
-                {genre.name}
-              </span>
+              {/* Tampilkan semua genre yang dikirim oleh API (sudah difilter SFW dari server) */}
+              {anime.genres?.map((genre) => (
+                <span 
+                  key={genre.mal_id}
+                  onClick={() => handleGenreList(genre.mal_id, genre.name)} 
+                  className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
+                >
+                  {genre.name}
+                </span>
+              ))}
             </div>
             <h1 className="text-4xl md:text-5xl font-black mb-2 leading-tight uppercase italic text-bright">{anime.title}</h1>
             <h2 className="text-xl text-muted font-medium italic opacity-70">{anime.title_japanese}</h2>
           </div>
 
-          {/* Sinopsis */}
           <div className="space-y-3">
             <h3 className="text-xl font-bold border-l-4 border-primary pl-4 uppercase tracking-wider">Synopsis</h3>
             <p className="text-muted leading-relaxed text-justify md:text-left text-sm md:text-base italic">
@@ -100,7 +100,6 @@ export default function AnimeDetails() {
             </p>
           </div>
 
-          {/* Video Trailer */}
           {anime.trailer?.embed_url && (
             <div className="pt-4 space-y-4">
               <h3 className="text-xl font-bold flex items-center gap-2 uppercase tracking-wider">
@@ -118,7 +117,6 @@ export default function AnimeDetails() {
             </div>
           )}
 
-          {/* Info Tambahan */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-white/5">
             <div className="space-y-1">
               <p className="text-[10px] text-muted uppercase font-bold tracking-widest">Studios</p>
