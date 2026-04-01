@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, X, } from 'lucide-react'; // Menggunakan lucide untuk ikon
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
 import githubIcon from "../assets/github-icon.svg"
 
 export default function Navbar() {
@@ -34,7 +34,15 @@ export default function Navbar() {
           </Link>
         </div>
 
+        {/* Navlink */}
+        <div className='flex items-center gap-4 flex-1 justify-center'>
+          <NavLink to="/anime/genres" className="text-bright hover:text-primary transition-colors">
+            Genres
+          </NavLink>
+          <NavLink to="/anime/seasons" className="text-bright hover:text-primary transition-colors">Season</NavLink>
+        </div>
         <div className="flex items-center gap-4 flex-1 justify-end max-w-xl">
+          
           {/* Github Logo */}
           <a 
             href="https://github.com/jocalvinshua/Web-AnimeTV"

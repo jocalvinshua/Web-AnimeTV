@@ -5,7 +5,7 @@ import Pagination from "../components/Pagination";
 
 export default function Anime() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { query, genreId, genreName, season } = useParams();
+  const { query, genreId, genreName, season, year } = useParams();
   const currentPage = searchParams.get("page") || 1;
   const orderBy = searchParams.get("order_by"); // Ambil dari URL
   const sortDir = searchParams.get("sort");     // Ambil dari URL
@@ -23,22 +23,33 @@ export default function Anime() {
     fetchParams.genres = genreId;
   } else if (query && query !== "undefined") {
     fetchParams.q = query;
-  } else if (season){
+  } else if (season === 'now'){
     endpoint = `seasons/${season}`
+  } else if (season){
+    endpoint = `seasons/${year}/${season}`
   }
 
   const handleSort = (sortBy) => {
     const newParams = new URLSearchParams(searchParams);
-    
-    if (sortBy === 'rating') {
-      newParams.set("order_by", "score");
-      newParams.set("sort", "desc");
-    } else {
-      newParams.delete("order_by");
-      newParams.delete("sort");
+    switch(sortBy){
+      case 'rating':
+        newParams.set("order_by", "score")
+        newParams.set("sort", 'desc')
+        break;
+      case 'popularity':
+        newParams.set("order_by", "popularity")
+        newParams.set("sort", "desc")
+        break;
+      case 'latest':
+        newParams.set('order_by', 'start_date')
+        newParams.set('sort', 'desc')
+        break;
+      default:
+        newParams.delete("order_by");
+        newParams.delete("sort");
+        break;
     }
-
-    newParams.set("page", "1"); 
+    newParams.set("page", "1");
     setSearchParams(newParams);
   };
 

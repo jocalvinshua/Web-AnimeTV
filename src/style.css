@@ -21,6 +21,7 @@
   .text-muted { color: var(--color-muted); }
   .border-primary { border-color: var(--color-primary); }
   .bg-muted {background-color: var(--color-muted);}
+  .hover\:text-primary:hover {color: var(--color-primary);}
 }
 
 /* Smooth Scrolling for the whole app */
