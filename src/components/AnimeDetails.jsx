@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Star, Clock, Calendar, ChevronLeft, PlayCircle } from "lucide-react";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
-const BANNED_GENRES = [9,12,49,28,26]
 export default function AnimeDetails() {
   const { id } = useParams();
   const animeId = id || 21; 
@@ -81,18 +80,13 @@ export default function AnimeDetails() {
         <div className="flex-1 space-y-8">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              {/* FILTER GENRE GLOBAL */}
-              {anime.genres
-                ?.filter(g => !BANNED_GENRES.includes(g.mal_id))
-                .map((genre) => (
-                <span 
-                  onClick={() => handleGenreList(genre.mal_id, genre.name)} 
-                  key={genre.mal_id} 
-                  className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
-                >
-                  {genre.name}
-                </span>
-              ))}
+              <span 
+                onClick={() => handleGenreList(genre.mal_id, genre.name)} 
+                key={genre.mal_id} 
+                className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
+              >
+                {genre.name}
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black mb-2 leading-tight uppercase italic text-bright">{anime.title}</h1>
             <h2 className="text-xl text-muted font-medium italic opacity-70">{anime.title_japanese}</h2>

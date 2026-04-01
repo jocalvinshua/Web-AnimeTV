@@ -22,8 +22,8 @@ export default function AnimeHeroList({ title, data, isLoading }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-start">
         {displayData.map((anime, index) => (
           <AnimeCard 
-            key={isLoading ? index : anime.mal_id} 
-            anime={anime} 
+            key={isLoading ? `skeleton-${index}` : `${anime.mal_id}-${index}`} 
+            anime={anime}
             isLoading={isLoading} 
           />
         ))}

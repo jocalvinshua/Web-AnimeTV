@@ -7,8 +7,6 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Daftar ID genre yang diblokir
-  const BANNED_GENRES = [9, 12, 49, 28, 26];
 
   const fetchData = useCallback(async () => {
     if (!endpoint) return;
@@ -18,7 +16,7 @@ export const useFetchAnime = (endpoint, params = {}, delay = 0) => {
 
     const finalParams = {
       ...params,
-      genres_exclude: BANNED_GENRES.join(',') 
+      sfw: true,
     };
 
     const queryString = new URLSearchParams(finalParams).toString();
