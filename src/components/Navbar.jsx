@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Search, X, Star, Play } from "lucide-react";
-import { Link, useNavigate, NavLink,  } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import githubIcon from "../assets/github-icon.svg";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
@@ -11,6 +11,12 @@ export default function Navbar() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const navigate = useNavigate();
 
+  const navlink = [
+    { id: 1, name: "Genres", path: "/anime/genres" },
+    { id: 2, name: "Seasons", path: "/anime/seasons" },
+    { id: 3, name: "Top Anime", path: "/anime/top" },
+    { id: 4, name: "Schedule", path: "/anime/schedule" },
+  ];
   // Debouncing
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,7 +29,7 @@ export default function Navbar() {
   // Suggested search
   const { data: suggestions, loading: isSuggesting } = useFetchAnime(
     debouncedSearch.length >= 3 ? "anime" : null,
-    { q: debouncedSearch, limit: 3 } 
+    { q: debouncedSearch, limit: 3 },
   );
 
   const handleSubmit = (e) => {
@@ -69,24 +75,15 @@ export default function Navbar() {
 
         {/* Navlink */}
         <div className="flex items-center gap-4 flex-1 justify-center">
-          <NavLink
-            to="/anime/genres"
-            className="text-bright hover:text-primary transition-colors"
-          >
-            Genres
-          </NavLink>
-          <NavLink
-            to="/anime/seasons"
-            className="text-bright hover:text-primary transition-colors"
-          >
-            Season
-          </NavLink>
-          <NavLink
-            to="/anime/top"
-            className="text-bright hover:text-primary transition-colors"
-          >
-            Top Anime
-          </NavLink>
+          {navlink.map((item) => (
+            <NavLink
+              key={item.id}
+              to={item.path}
+              className="text-bright hover:text-primary transition-colors"
+            >
+              {item.name}
+            </NavLink>
+          ))}
         </div>
         <div className="flex items-center gap-4 flex-1 justify-end max-w-xl">
           {/* Github Logo */}
