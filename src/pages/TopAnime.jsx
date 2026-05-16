@@ -7,47 +7,18 @@ import Pagination from "../components/Pagination";
 
 export default function TopAnime() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filter, setFilter] = useState(""); // "" = All, "airing", "upcoming", "movie", "bypopularity"
-
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   const fetchParams = useMemo(() => {
     const params = { page: currentPage, limit: 24 };
-    if (filter) params.filter = filter;
     return params;
-  }, [currentPage, filter]);
+  }, [currentPage]);
 
   const {
     data: topAnimeList,
     loading,
     pagination,
   } = useFetchAnime("top/anime", fetchParams);
-
-  const handleFilterChange = useCallback(
-    (newFilter) => {
-      setFilter(newFilter);
-      setSearchParams({ page: 1 });
-    },
-    [setSearchParams],
-  );
-
-  const filterButtons = [
-    { id: 1, name: "All Time", value: "", icon: <Trophy size={16} /> },
-    { id: 2, name: "Top Airing", value: "airing", icon: <Flame size={16} /> },
-    {
-      id: 3,
-      name: "Most Popular",
-      value: "bypopularity",
-      icon: <Star size={16} />,
-    },
-    {
-      id: 4,
-      name: "Top Movies",
-      value: "movie",
-      icon: <Clapperboard size={16} />,
-    },
-    { id: 5, name: "Upcoming", value: "upcoming", icon: <Tv size={16} /> },
-  ];
 
   return (
     <div className="min-h-screen px-4 md:px-12 lg:px-24 py-10 text-bright">
