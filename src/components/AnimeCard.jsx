@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-// Tambahkan prop 'rank' di sini
 export default function AnimeCard({ anime, isLoading, isTopAnime = false, rank = null }) {
   const navigate = useNavigate();
 
@@ -10,7 +9,6 @@ export default function AnimeCard({ anime, isLoading, isTopAnime = false, rank =
     }
   };
 
-  // Logika warna badge peringkat dipindahkan ke dalam card agar tidak error
   const getRankBadgeColor = (globalRank) => {
     if (globalRank === 1) return "bg-yellow-500 text-black font-black";
     if (globalRank === 2) return "bg-slate-300 text-black font-black";
@@ -21,41 +19,41 @@ export default function AnimeCard({ anime, isLoading, isTopAnime = false, rank =
   return (
     isLoading || !anime ? (
       /* --- STATE LOADING (SKELETON) --- */
-      <div className="relative w-[232px] h-[458px] bg-card rounded-2xl overflow-hidden shadow-sm border border-white/5">
-        <div className="w-full h-[320px] bg-gray-800 animate-pulse" />
-        <div className="p-5 space-y-4">
-          <div className="h-4 w-full bg-gray-700 rounded-full animate-pulse" />
-          <div className="h-4 w-2/3 bg-gray-700 rounded-full animate-pulse" />
-          <div className="h-5 w-16 bg-gray-800 rounded-md animate-pulse" />
+      <div className="relative w-[200px] h-[390px] bg-card rounded-2xl overflow-hidden shadow-sm border border-white/5">
+        <div className="w-full h-[270px] bg-gray-800 animate-pulse" />
+        <div className="p-4 space-y-3">
+          <div className="h-3.5 w-full bg-gray-700 rounded-full animate-pulse" />
+          <div className="h-3.5 w-2/3 bg-gray-700 rounded-full animate-pulse" />
+          <div className="h-4 w-14 bg-gray-800 rounded-md animate-pulse" />
         </div>
       </div>
     ) : (
       /* --- STATE DATA TERSEDIA --- */
       <div
-        className="relative w-[232px] h-[458px] bg-card rounded-2xl overflow-hidden shadow-md border border-white/5 flex flex-col cursor-pointer hover:ring-2 hover:ring-primary transition-all group"
+        className="relative w-[200px] h-[390px] bg-card rounded-2xl overflow-hidden shadow-md border border-white/5 flex flex-col cursor-pointer transition-all group"
         onClick={handleDetails}
       >
         {/* Area Poster */}
-        <div className="relative w-full h-[320px] bg-gray-900 overflow-hidden">
+        <div className="relative w-full h-[270px] bg-gray-900 overflow-hidden">
           <img
             src={anime.images?.jpg?.large_image_url}
             alt={anime.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
-          ></img>
+          />
 
           {/* BADGE HALAMAN BIASA */}
           {!isTopAnime ? (
             <>
-              <div className="absolute top-3 left-3 flex flex-col gap-2">
-                <span className="bg-primary text-[10px] font-bold text-white px-2 py-0.5 rounded uppercase">
+              <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+                <span className="bg-primary text-[9px] font-bold text-white px-1.5 py-0.5 rounded uppercase tracking-wide">
                   {anime.type}
                 </span>
-                <span className="bg-black/60 text-[10px] font-bold text-white px-2 py-0.5 rounded">
+                <span className="bg-black/60 text-[9px] font-bold text-white px-1.5 py-0.5 rounded">
                   {anime.rating?.split(" ")[0] || "13+"}
                 </span>
               </div>
-              <div className="absolute top-3 right-3 bg-yellow-500 text-black px-2 py-0.5 rounded text-xs font-black shadow-lg">
+              <div className="absolute top-2.5 right-2.5 bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[11px] font-black shadow-lg">
                 ★ {anime.score || "0.0"}
               </div>
             </>
@@ -63,13 +61,12 @@ export default function AnimeCard({ anime, isLoading, isTopAnime = false, rank =
             /* FLOATING RANK UNTUK TOP ANIME */
             <>
               <div
-                className={`absolute top-3 left-3 z-10 px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-2xl transition-transform duration-300 group-hover:scale-110 ${getRankBadgeColor(rank)}`}
+                className={`absolute top-2.5 left-2.5 z-10 px-2.5 py-1 rounded-xl text-[10px] flex items-center gap-0.5 shadow-2xl transition-transform duration-300 group-hover:scale-110 ${getRankBadgeColor(rank)}`}
               >
                 <span>#</span>
-                <span className="text-sm">{rank}</span>
+                <span className="text-xs">{rank}</span>
               </div>
-              {/* Tetap tampilkan skor di kanan atas meskipun di halaman Top Anime */}
-              <div className="absolute top-3 right-3 bg-yellow-500 text-black px-2 py-0.5 rounded text-xs font-black shadow-lg">
+              <div className="absolute top-2.5 right-2.5 bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[11px] font-black shadow-lg">
                 ★ {anime.score || "0.0"}
               </div>
             </>
@@ -77,16 +74,16 @@ export default function AnimeCard({ anime, isLoading, isTopAnime = false, rank =
         </div>
 
         {/* Info Detail */}
-        <div className="p-4 flex flex-col justify-between flex-1">
-          <h4 className="text-bright font-bold text-sm line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+        <div className="p-3 flex flex-col justify-between flex-1">
+          <h4 className="text-bright font-bold text-xs line-clamp-2 leading-snug group-hover:text-primary transition-colors">
             {anime.title}
           </h4>
 
-          <div className="flex items-center justify-between mt-auto">
-            <span className="text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded">
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-[9px] font-bold text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded max-w-[95px] truncate">
               {anime.genres?.[0]?.name || "Anime"}
             </span>
-            <span className="text-[11px] text-muted font-semibold">
+            <span className="text-[10px] text-muted font-semibold shrink-0">
               {anime.episodes ? `${anime.episodes} EPS` : "Ongoing"}
             </span>
           </div>

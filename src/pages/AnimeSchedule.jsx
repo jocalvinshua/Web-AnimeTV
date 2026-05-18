@@ -70,7 +70,7 @@ function AnimeSchedule() {
         })}
       </header>
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center">
           {Array(8)
             .fill(0)
             .map((_, i) => (
@@ -89,7 +89,7 @@ function AnimeSchedule() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center">
             {animeSchedule.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} isLoading={false} />
             ))}

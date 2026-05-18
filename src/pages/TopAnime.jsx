@@ -10,7 +10,7 @@ export default function TopAnime() {
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   const fetchParams = useMemo(() => {
-    const params = { page: currentPage, limit: 24 };
+    const params = { page: currentPage, limit: 25 };
     return params;
   }, [currentPage]);
 
@@ -38,7 +38,7 @@ export default function TopAnime() {
       {/* --- GRID CONTENT SECTION --- */}
       {loading ? (
         /* SKELETON LOADING STATE */
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 justify-items-center">
           {Array(8)
             .fill(0)
             .map((_, i) => (
@@ -49,7 +49,7 @@ export default function TopAnime() {
         </div>
       ) : topAnimeList && topAnimeList.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 justify-items-center">
             {topAnimeList.map((anime, index) => {
               // Menghitung peringkat asli berdasarkan index dan halaman
               const globalRank =

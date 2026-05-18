@@ -12,7 +12,7 @@ export default function Anime() {
 
   const fetchParams = {
     page: currentPage,
-    limit: 24,
+    limit: 25,
   };
 
   if (orderBy) fetchParams.order_by = orderBy;
@@ -73,7 +73,7 @@ export default function Anime() {
     <div className="min-h-screen px-4 md:px-12 lg:px-24 py-10">
       {loading ? (
         // Skeleton Card
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6 justify-items-center lg:justify-items-start">
           {Array(10)
             .fill(0)
             .map((_, i) => (
@@ -113,7 +113,7 @@ export default function Anime() {
               Popularity
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 justify-items-center lg:justify-items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6 justify-items-center lg:justify-items-start">
             {animeSearch.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} isLoading={false} />
             ))}
