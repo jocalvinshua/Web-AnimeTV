@@ -113,7 +113,7 @@ export default function Anime() {
               Popularity
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6 justify-items-center lg:justify-items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center lg:justify-items-start">
             {animeSearch.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} isLoading={false} />
             ))}
