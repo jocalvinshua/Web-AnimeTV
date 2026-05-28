@@ -1,13 +1,24 @@
 import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Star, Clock, Calendar, ChevronLeft, PlayCircle } from "lucide-react";
+import {
+  Star,
+  Clock,
+  Calendar,
+  ChevronLeft,
+  PlayCircle,
+  Heart,
+  ArrowRight,
+  Link2,
+} from "lucide-react";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
 export default function AnimeDetails() {
   const { id } = useParams();
-  const animeId = id || 21; 
+  const animeId = id || 21;
   // Hook useFetchAnime sudah menangani ?sfw secara global
-  const { data: anime, loading: animeDetailLoading } = useFetchAnime(`anime/${animeId}/full`);
+  const { data: anime, loading: animeDetailLoading } = useFetchAnime(
+    `anime/${animeId}/full`,
+  );
   const navigate = useNavigate();
 
   const handleGenreList = (genreId, genreName) => {
@@ -18,83 +29,132 @@ export default function AnimeDetails() {
     if (anime?.title) {
       document.title = `${anime.title} | AnimeTV`;
     }
-    return () => { document.title = "AnimeTV"; };
+    return () => {
+      document.title = "AnimeTV";
+    };
   }, [anime]);
 
-  if (animeDetailLoading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  );
+  // Debugging
+  useEffect(()=>{
+    console.log(anime.theme)
+  },[anime])
 
-  if (!anime) return <div className="text-center py-20 text-muted font-bold uppercase">Anime Not Found.</div>;
+  if (animeDetailLoading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+
+  if (!anime)
+    return (
+      <div className="text-center py-20 text-muted font-bold uppercase">
+        Anime Not Found.
+      </div>
+    );
+
+  if (!anime?.relations || anime.relations.length === 0) {
+    return (
+      <div className="mt-10 bg-card/30 border border-white/5 rounded-2xl p-6 text-center text-muted text-sm">
+        No relations available for this anime.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <Link to="/" className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 group font-bold uppercase text-xs tracking-widest">
-        <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        Back to Home
-      </Link>
+      <button
+        onClick={()=>navigate(-1)}
+        className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 group font-bold uppercase text-xs tracking-widest"
+      >
+        <ChevronLeft
+          size={20}
+          className="group-hover:-translate-x-1 transition-transform"
+        />
+        Back
+      </button>
 
       <article className="flex flex-col md:flex-row gap-10 items-start mb-16">
         <div className="w-full md:w-1/3 md:sticky md:top-24">
           <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
-            <img 
-              src={anime.images?.jpg?.large_image_url} 
-              alt={anime.title} 
-              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+            <img
+              src={anime.images?.jpg?.large_image_url}
+              alt={anime.title}
+              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
-          
+
           <div className="mt-6 grid grid-cols-2 gap-4">
             <div className="bg-card p-4 rounded-xl border border-white/5 text-center shadow-lg">
-              <Star className="mx-auto mb-1 text-yellow-400" size={20} fill="currentColor" />
+              <Star
+                className="mx-auto mb-1 text-yellow-400"
+                size={20}
+                fill="currentColor"
+              />
               <p className="text-xl font-bold">{anime.score || "N/A"}</p>
-              <p className="text-[10px] text-muted uppercase tracking-wider font-bold">Score</p>
+              <p className="text-[10px] text-muted uppercase tracking-wider font-bold">
+                Score
+              </p>
             </div>
             <div className="bg-card p-4 rounded-xl border border-white/5 text-center shadow-lg">
               <Clock className="mx-auto mb-1 text-primary" size={20} />
-              <p className="text-sm font-bold truncate">{anime.duration?.split(" per")[0] || "N/A"}</p>
-              <p className="text-[10px] text-muted uppercase tracking-wider font-bold">Duration</p>
+              <p className="text-sm font-bold truncate">
+                {anime.duration?.split(" per")[0] || "N/A"}
+              </p>
+              <p className="text-[10px] text-muted uppercase tracking-wider font-bold">
+                Duration
+              </p>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col gap-1 p-4 bg-white/5 rounded-xl border border-white/5">
-            <div className="flex items-center gap-2 text-primary">
-               <Calendar size={16} />
-               <p className="text-xs font-black uppercase tracking-widest">Aired Information</p>
+          <div className="mt-4 p-4 bg-card/40 rounded-xl border border-white/5 space-y-2.5">
+            <div className="flex items-center gap-2 text-primary border-b border-white/5 pb-1.5">
+              <Calendar size={14} />
+              <p className="text-[10px] font-black uppercase tracking-widest">
+                Aired Information
+              </p>
             </div>
-            <p className="text-sm font-medium">
-              <span className="text-muted">Status:</span> {anime.status}
-            </p>
-            {!anime.airing && (
-               <p className="text-sm font-medium">
-                 <span className="text-muted">Aired:</span> {anime.aired?.string || "Unknown"}
-               </p>
-            )}
+            <div className="space-y-1 text-xs">
+              <p className="font-medium text-bright/90">
+                <span className="text-muted mr-1">Status:</span> {anime.status}
+              </p>
+              <p className="font-medium text-bright/90">
+                <span className="text-muted mr-1">Aired:</span>{" "}
+                {anime.aired?.string || "Unknown"}
+              </p>
+            </div>
           </div>
+
+          <button className="mt-4 flex items-center justify-center gap-2 w-full bg-primary hover:bg-primary/95 text-background font-black text-sm py-3 rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98]">
+            <Heart size={16} fill="currentColor" /> Add to Favorites
+          </button>
         </div>
 
         <div className="flex-1 space-y-8">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              {/* Tampilkan semua genre yang dikirim oleh API (sudah difilter SFW dari server) */}
               {anime.genres?.map((genre) => (
-                <span 
+                <span
                   key={genre.mal_id}
-                  onClick={() => handleGenreList(genre.mal_id, genre.name)} 
+                  onClick={() => handleGenreList(genre.mal_id, genre.name)}
                   className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-md border border-primary/20 uppercase tracking-tighter cursor-pointer hover:bg-primary hover:text-main transition-colors"
                 >
                   {genre.name}
                 </span>
               ))}
             </div>
-            <h1 className="text-4xl md:text-5xl font-black mb-2 leading-tight uppercase italic text-bright">{anime.title}</h1>
-            <h2 className="text-xl text-muted font-medium italic opacity-70">{anime.title_japanese}</h2>
+            <h1 className="text-4xl md:text-5xl font-black mb-2 leading-tight uppercase italic text-bright">
+              {anime.title}
+            </h1>
+            <h2 className="text-xl text-muted font-medium italic opacity-70">
+              {anime.title_japanese}
+            </h2>
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-xl font-bold border-l-4 border-primary pl-4 uppercase tracking-wider">Synopsis</h3>
+            <h3 className="text-xl font-bold border-l-4 border-primary pl-4 uppercase tracking-wider">
+              Synopsis
+            </h3>
             <p className="text-muted leading-relaxed text-justify md:text-left text-sm md:text-base italic">
               {anime.synopsis || "No synopsis available for this title."}
             </p>
@@ -119,20 +179,85 @@ export default function AnimeDetails() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-white/5">
             <div className="space-y-1">
-              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">Studios</p>
-              <p className="font-semibold text-sm">{anime.studios?.map(s => s.name).join(", ") || "-"}</p>
+              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">
+                Studios
+              </p>
+              <p className="font-semibold text-sm">
+                {anime.studios?.map((s) => s.name).join(", ") || "-"}
+              </p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">Source</p>
+              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">
+                Source
+              </p>
               <p className="font-semibold text-sm">{anime.source || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">Episodes</p>
-              <p className="font-semibold text-sm">{anime.episodes || "Ongoing"}</p>
+              <p className="text-[10px] text-muted uppercase font-bold tracking-widest">
+                Episodes
+              </p>
+              <p className="font-semibold text-sm">
+                {anime.episodes || "Ongoing"}
+              </p>
             </div>
           </div>
         </div>
       </article>
+
+      <div className="space-y-6 mt-10">
+        {/* Header Section */}
+        <div className="flex items-center gap-2 border-b border-white/5 pb-4">
+          <Link2 className="text-primary" size={22} />
+          <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-bright">
+            Anime <span className="text-primary">Relations</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {anime.relations.flatMap((relationGroup) =>
+            relationGroup.entry?.map((item) => {
+              const isAnime = item.type === "anime";
+
+              return (
+                <div
+                  key={item.mal_id}
+                  onClick={() =>
+                    isAnime && navigate(`/anime-details/${item.mal_id}`)
+                  }
+                  className={`flex items-center justify-between p-3 bg-card/40 hover:bg-card border border-white/5 rounded-xl transition-all duration-300 group h-[76px] ${
+                    isAnime
+                      ? "cursor-pointer hover:border-primary/30 hover:ring-1 hover:ring-primary/20"
+                      : "opacity-60 cursor-not-allowed"
+                  }`}
+                >
+                  <div className="flex flex-col gap-0.5 min-w-0 flex-1 pr-2">
+                    {/* Nama Relasi */}
+                    <span className="text-[9px] font-black uppercase tracking-wider text-primary/80 block truncate">
+                      {relationGroup.relation}
+                    </span>
+                    {/* Judul Anime/Manga */}
+                    <h4 className="text-bright font-bold text-xs truncate group-hover:text-primary transition-colors">
+                      {item.name}
+                    </h4>
+                    {/* Tipe Media */}
+                    <span className="text-[9px] text-muted font-bold uppercase tracking-wider block">
+                      {item.type}
+                    </span>
+                  </div>
+
+                  {/* Navigasi Arrow */}
+                  {isAnime && (
+                    <ArrowRight
+                      size={14}
+                      className="text-muted group-hover:text-primary transform group-hover:translate-x-1 transition-all shrink-0"
+                    />
+                  )}
+                </div>
+              );
+            }),
+          )}
+        </div>
+      </div>
     </div>
   );
 }
