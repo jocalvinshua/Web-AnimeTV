@@ -92,7 +92,7 @@ export default function Navbar() {
             href="https://github.com/jocalvinshua/Web-AnimeTV"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center"
+            className="hidden p-2 transition-all duration-300 hover:scale-110 active:scale-95 md:flex items-center"
             title="View Source on GitHub"
           >
             <svg

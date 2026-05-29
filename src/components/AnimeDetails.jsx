@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Star,
@@ -13,9 +13,9 @@ import {
 import { useFetchAnime } from "../hook/useFetchAnime";
 
 export default function AnimeDetails() {
+  const [isFavorite, setIsFavorite] = useState(false);
   const { id } = useParams();
-  const animeId = id || 21;
-  // Hook useFetchAnime sudah menangani ?sfw secara global
+  const animeId = id ? Number(id) : 21;
   const { data: anime, loading: animeDetailLoading } = useFetchAnime(
     `anime/${animeId}/full`,
   );
@@ -25,7 +25,47 @@ export default function AnimeDetails() {
     navigate(`/anime/genre/${genreId}/${genreName.toLowerCase()}`);
   };
 
-  useEffect(() => {
+  const checkFavoriteStatus = useCallback(() => {
+    const localData = localStorage.getItem("Anime-Favorites");
+    if (localData) {
+      const favoritesList = JSON.parse(localData);
+      const exists = favoritesList.some((item) => item.id === animeId);
+      setIsFavorite(exists);
+    } else {
+      setIsFavorite(false);
+    }
+  }, [animeId]);
+  const handleFavorite = () => {
+    if (!anime) return;
+
+    const localData = localStorage.getItem("Anime-Favorites");
+    const favoritesList = localData ? JSON.parse(localData) : [];
+
+    const newFavorite = {
+      id: animeId,
+      title: anime.title,
+      image: anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url,
+      score: anime.score,
+    };
+
+    // Mencegah duplikasi data sebelum push
+    if (!favoritesList.some((item) => item.id === animeId)) {
+      const updatedList = [...favoritesList, newFavorite];
+      localStorage.setItem("Anime-Favorites", JSON.stringify(updatedList));
+      setIsFavorite(true);
+    }
+  };
+  const handleUnfavorite = () => {
+    const localData = localStorage.getItem("Anime-Favorites");
+    if (localData) {
+      const favoritesList = JSON.parse(localData);
+      const updatedList = favoritesList.filter((item) => item.id !== animeId);
+      localStorage.setItem("Anime-Favorites", JSON.stringify(updatedList));
+      setIsFavorite(false);
+    }
+  };
+
+  const handleTitle = useCallback(() => {
     if (anime?.title) {
       document.title = `${anime.title} | AnimeTV`;
     }
@@ -34,10 +74,16 @@ export default function AnimeDetails() {
     };
   }, [anime]);
 
+  useEffect(() => {
+    handleTitle();
+    checkFavoriteStatus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [handleTitle, checkFavoriteStatus, id]);
+
   // Debugging
-  useEffect(()=>{
-    console.log(anime.theme)
-  },[anime])
+  // useEffect(()=>{
+  //   console.log(anime.theme)
+  // },[anime])
 
   if (animeDetailLoading)
     return (
@@ -64,7 +110,7 @@ export default function AnimeDetails() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <button
-        onClick={()=>navigate(-1)}
+        onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 group font-bold uppercase text-xs tracking-widest"
       >
         <ChevronLeft
@@ -125,8 +171,16 @@ export default function AnimeDetails() {
             </div>
           </div>
 
-          <button className="mt-4 flex items-center justify-center gap-2 w-full bg-primary hover:bg-primary/95 text-background font-black text-sm py-3 rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98]">
-            <Heart size={16} fill="currentColor" /> Add to Favorites
+          <button
+            onClick={isFavorite ? handleUnfavorite : handleFavorite}
+            className={`mt-4 flex items-center justify-center gap-2 w-full font-black text-sm py-3 rounded-xl shadow-lg transition-all active:scale-[0.98] ${
+              isFavorite
+                ? "bg-card text-primary border border-primary/30 hover:bg-primary/10 shadow-black/20"
+                : "bg-primary hover:bg-primary/95 text-background shadow-primary/10"
+            }`}
+          >
+            <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
+            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
           </button>
         </div>
 
@@ -231,21 +285,17 @@ export default function AnimeDetails() {
                   }`}
                 >
                   <div className="flex flex-col gap-0.5 min-w-0 flex-1 pr-2">
-                    {/* Nama Relasi */}
                     <span className="text-[9px] font-black uppercase tracking-wider text-primary/80 block truncate">
                       {relationGroup.relation}
                     </span>
-                    {/* Judul Anime/Manga */}
                     <h4 className="text-bright font-bold text-xs truncate group-hover:text-primary transition-colors">
                       {item.name}
                     </h4>
-                    {/* Tipe Media */}
                     <span className="text-[9px] text-muted font-bold uppercase tracking-wider block">
                       {item.type}
                     </span>
                   </div>
 
-                  {/* Navigasi Arrow */}
                   {isAnime && (
                     <ArrowRight
                       size={14}
