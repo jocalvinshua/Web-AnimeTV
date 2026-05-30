@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AnimeHeroList from "../components/AnimeHeroList.jsx";
 import Carousel from "../components/Carousel";
 import { useFetchAnime } from "../hook/useFetchAnime.jsx";
-import AnimeCarousel from "../components/AnimeCarousel.jsx";
+import AnimeSlider from "../components/AnimeSlider.jsx";
 
 export default function Home() {
   const getUpcomingSeasonPath = () => {
@@ -28,14 +28,27 @@ export default function Home() {
   const { data: carouselAnime, loading: loadingTop } = useFetchAnime(
     "top/anime",
     { limit: 5 },
+    0
   );
   const { data: seasonalAnime, loading: seasonalAnimeLoading } = useFetchAnime(
     "seasons/now",
     { limit: 12 },
+    1000
   );
   const { data: upComingAnime, loading: upComingAnimeLoading } = useFetchAnime(
     "seasons/upcoming",
     { limit: 12 },
+    2000
+  );
+
+  const { data: movieAnime, loading: movieAnimeLoading } = useFetchAnime(
+    "anime",
+    {
+      type: "movie",
+      order_by: "popularity",
+      limit: 12,
+    },
+    3000
   );
 
   return (
@@ -43,17 +56,24 @@ export default function Home() {
       <Carousel data={carouselAnime} isLoading={loadingTop} />
 
       <main className="max-w-auto mx-auto px-6 md:px-16 xl:px-20 py-10 space-y-10">
-        <AnimeCarousel
+        <AnimeSlider
           data={seasonalAnime}
           title={"This Season's"}
           path="/anime/season/now"
           isLoading={seasonalAnimeLoading}
         />
-        <AnimeCarousel
+        <AnimeSlider
           data={upComingAnime}
           title={"Upcoming"}
           isLoading={upComingAnimeLoading}
           path={getUpcomingSeasonPath()}
+        />
+
+        <AnimeSlider
+          data={movieAnime}
+          title={"Anime Movie"}
+          path="/anime/movie"
+          isLoading={movieAnimeLoading}
         />
       </main>
     </div>

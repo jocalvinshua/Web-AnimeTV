@@ -1,4 +1,4 @@
-import { Github, Twitter, Instagram, Heart } from "lucide-react";
+import { Github, Linkedin, Instagram, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -25,14 +25,18 @@ export default function Footer() {
                 className="hover:text-primary cursor-pointer transition-colors"
               />
             </a>
-            <Twitter
-              size={20}
-              className="hover:text-primary cursor-pointer transition-colors"
-            />
-            <Instagram
-              size={20}
-              className="hover:text-primary cursor-pointer transition-colors"
-            />
+            <a href="https://linkedin.com/in/joshua-calvin-12a7a2319/">
+              <Linkedin
+                size={20}
+                className="hover:text-primary cursor-pointer transition-colors"
+              />
+            </a>
+            <a href="https://www.instagram.com/jocalvinshua/">
+              <Instagram
+                size={20}
+                className="hover:text-primary cursor-pointer transition-colors"
+              />
+            </a>
           </div>
         </div>
 
@@ -60,7 +64,9 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-sm text-muted">
               <li className="hover:text-primary transition-colors cursor-pointer">
-                Jikan API
+                <a href='https://jikan.moe/'>
+                  Jikan API
+                </a>
               </li>
               <li className="hover:text-primary transition-colors cursor-pointer">
                 Privacy Policy
@@ -76,8 +82,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted font-medium">
         <p>© {currentYear} AnimeTV. All rights reserved.</p>
         <p className="flex items-center gap-1">
-          Made with <Heart size={14} className="text-primary fill-primary" /> by
-          YourName
+          Made with{" "}
+          <Heart
+            size={14}
+            fill="#e11d48"
+            className="text-primary fill-primary"
+          />{" "}
+          by Jocalvin
         </p>
       </div>
     </footer>
