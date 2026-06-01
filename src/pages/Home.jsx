@@ -52,7 +52,7 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-background text-bright font-sans">
+    <div className="min-h-screen bg-background text-bright font-sans mt-6">
       <Carousel data={carouselAnime} isLoading={loadingTop} />
 
       <main className="max-w-auto mx-auto px-6 md:px-16 xl:px-20 py-10 space-y-10">

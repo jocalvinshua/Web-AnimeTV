@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
-import AnimeDetails from "./components/AnimeDetails.jsx";
+import AnimeDetails from "./pages/AnimeDetails.jsx";
 import "./style.css";
 import Anime from "./pages/Anime.jsx";
 import CollectionList from "./pages/CollectionList.jsx";

@@ -50,7 +50,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-navbar sticky top-0 h-[70px] w-full px-4 md:px-12 lg:px-24 flex items-center justify-between z-50 backdrop-blur-md text-bright shadow-lg border-b border-white/5 transition-all mb-6">
+      <nav className="bg-navbar sticky top-0 h-[70px] w-full px-4 md:px-12 lg:px-24 flex items-center justify-between z-50 backdrop-blur-md text-bright shadow-lg border-b border-white/5 transition-all">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 group">
             <h1 className="text-xl font-extrabold tracking-tight text-bright">
