@@ -71,7 +71,7 @@ export default function Home() {
 
         <AnimeSlider
           data={movieAnime}
-          title={"Anime Movie"}
+          title={"Movie"}
           path="/anime/movie"
           isLoading={movieAnimeLoading}
         />
