@@ -88,6 +88,11 @@ export default function AnimeDetails() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [handleTitle, checkFavoriteStatus, id]);
 
+  // Debugging
+  // useEffect(() => {
+  //   console.log("Anime data:", anime.aired);
+  // }, [anime]);
+
   if (animeDetailLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -190,7 +195,7 @@ export default function AnimeDetails() {
                 <span
                   key={genre.mal_id}
                   onClick={() => handleGenreList(genre.mal_id, genre.name)}
-                  className="text-[10px] font-black uppercase tracking-wider text-white/80 border border-white/10 px-3 py-1 rounded-md bg-white/5 cursor-pointer hover:bg-primary hover:text-background hover:border-primary transition-all"
+                  className="text-[10px] font-black uppercase tracking-wider text-primary border border-white/10 px-3 py-1 rounded-md bg-white/5 cursor-pointer hover:bg-primary hover:text-background hover:border-primary transition-all"
                 >
                   {genre.name}
                 </span>
@@ -310,6 +315,7 @@ export default function AnimeDetails() {
                   { label: "Type", value: anime.type },
                   { label: "Status", value: anime.status },
                   { label: "Source", value: anime.source },
+                  { label: "Aired", value: anime.aired?.string },
                   {
                     label: "Studio",
                     value: anime.studios?.map((s) => s.name).join(", "),
