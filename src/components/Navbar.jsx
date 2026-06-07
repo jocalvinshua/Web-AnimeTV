@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Search, X, Star, Play } from "lucide-react";
+import { Search, X, Star } from "lucide-react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import githubIcon from "../assets/github-icon.svg";
 import { useFetchAnime } from "../hook/useFetchAnime";
 
 export default function Navbar() {
@@ -11,22 +10,18 @@ export default function Navbar() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const navigate = useNavigate();
 
-  const navlink = [
+  const navLinks = [
     { id: 1, name: "Genres", path: "/anime/genres" },
     { id: 2, name: "Seasons", path: "/anime/seasons" },
     { id: 3, name: "Top Anime", path: "/anime/top" },
     { id: 4, name: "Schedule", path: "/anime/schedule" },
   ];
-  // Debouncing
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Suggested search
   const { data: suggestions, loading: isSuggesting } = useFetchAnime(
     debouncedSearch.length >= 3 ? "anime" : null,
     { q: debouncedSearch, limit: 3 },
@@ -34,12 +29,10 @@ export default function Navbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (search.trim()) {
-      navigate(`/anime/${search}`);
-      // Tutup modal dan reset input
-      setIsSearchOpen(false);
-      setSearch("");
-    }
+    if (!search.trim()) return;
+    navigate(`/anime/${search}`);
+    setIsSearchOpen(false);
+    setSearch("");
   };
 
   const handleSelectSuggestion = (id) => {
@@ -48,78 +41,90 @@ export default function Navbar() {
     setSearch("");
   };
 
+  const closeMenu = () => setIsOpen(false);
+
   return (
     <>
-      <nav className="bg-navbar sticky top-0 h-[70px] w-full px-4 md:px-12 lg:px-24 flex items-center justify-between z-50 backdrop-blur-md text-bright shadow-lg border-b border-white/5 transition-all">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2 group">
-            <h1 className="text-xl font-extrabold tracking-tight text-bright">
-              Anime<span className="text-primary">TV</span>
-            </h1>
-            <svg
-              className="w-6 h-6 text-primary group-hover:animate-pulse"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 2.286a1 1 0 001.414 0L21 5M13 7h8m-8 4h8m-8 4h8m-8 4h8"
-              />
-            </svg>
-          </Link>
-        </div>
+      <nav className="bg-navbar sticky top-0 h-[70px] w-full px-4 md:px-12 lg:px-24 flex items-center justify-between z-50 backdrop-blur-md border-b border-white/5 shadow-lg transition-all">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
+          <h1 className="text-xl font-extrabold tracking-tight text-bright">
+            Anime<span className="text-primary">TV</span>
+          </h1>
+          <svg
+            className="w-6 h-6 text-primary group-hover:animate-pulse"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 2.286a1 1 0 001.414 0L21 5M13 7h8m-8 4h8m-8 4h8m-8 4h8"
+            />
+          </svg>
+        </Link>
 
-        {/* Navlink Desktop - Ditambahkan utility 'hidden md:flex' agar sembunyi di HP */}
+        {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
-          {navlink.map((item) => (
+          {navLinks.map((item) => (
             <NavLink
               key={item.id}
               to={item.path}
-              className="text-bright hover:text-primary transition-colors font-medium"
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors ${isActive ? "text-primary" : "text-bright hover:text-primary"}`
+              }
             >
               {item.name}
             </NavLink>
           ))}
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-end max-w-xl">
-          {/* Github Logo - Disembunyikan di mobile agar tidak terlalu padat, atau biarkan flex jika muat */}
+        {/* Right actions */}
+        <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
           <a
             href="https://github.com/jocalvinshua/Web-AnimeTV"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden p-2 transition-all duration-300 hover:scale-110 active:scale-95 md:flex items-center"
             title="View Source on GitHub"
+            className="hidden md:flex p-2 text-muted hover:text-bright transition-colors"
           >
             <svg
               viewBox="0 0 24 24"
-              className="w-6 h-6 fill-current text-muted hover:text-bright transition-colors"
+              className="w-5 h-5 fill-current"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
             </svg>
           </a>
 
+          {/* Search button */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="bg-transparent p-2 transition-all duration-300 ease-out hover:scale-110 active:scale-95 text-bright hover:text-primary"
+            className="p-2 text-bright hover:text-primary transition-colors"
           >
-            <Search size={24} />
+            <Search size={22} />
           </button>
 
-          {/* Hamburger Button */}
+          {/* Favorites button — desktop only */}
+          <Link
+            to="/favorites"
+            className="hidden md:inline-flex items-center gap-1.5 bg-primary hover:bg-primary/85 text-background text-xs font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all"
+          >
+            Favorites
+          </Link>
+
+          {/* Hamburger — mobile only */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 md:hidden hover:bg-white/10 rounded-lg transition-colors text-bright z-50"
+            className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors text-bright"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -137,33 +142,24 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
+      {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsOpen(false)}
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={closeMenu}
       />
 
-      {/* --- MOBILE MENU PANEL --- */}
+      {/* Mobile menu panel */}
       <div
-        className={`fixed top-[70px] right-0 w-[280px] sm:w-[320px] h-[calc(100vh-70px)] bg-navbar/95 backdrop-blur-md border-l border-white/5 p-6 z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col gap-4 shadow-2xl ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-[70px] right-0 w-[280px] sm:w-[320px] h-[calc(100vh-70px)] bg-navbar/95 backdrop-blur-md border-l border-white/5 p-6 z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col gap-6 shadow-2xl ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted px-3 mb-2">
-            Navigation
-          </span>
-          {navlink.map((item) => (
+          {navLinks.map((item) => (
             <NavLink
               key={item.id}
               to={item.path}
-              onClick={() => setIsOpen(false)}
+              onClick={closeMenu}
               className={({ isActive }) =>
-                `text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 ${
+                `text-sm font-medium px-4 py-3 rounded-xl transition-all ${
                   isActive
                     ? "bg-primary/20 text-primary border-l-4 border-primary pl-3"
                     : "text-bright hover:bg-white/5 hover:text-primary"
@@ -174,30 +170,38 @@ export default function Navbar() {
             </NavLink>
           ))}
         </div>
+
+        <Link
+          to="/favorites"
+          onClick={closeMenu}
+          className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/85 text-background text-xs font-black uppercase tracking-wider px-4 py-3 rounded-xl transition-all"
+        >
+          Favorites
+        </Link>
       </div>
 
-      {/* --- SEARCH MODAL OVERLAY --- */}
+      {/* Search modal */}
       <div
         className={`fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4 transition-all duration-300 ${isSearchOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
         <div
           className="absolute inset-0 bg-black/80 backdrop-blur-xl"
           onClick={() => setIsSearchOpen(false)}
-        ></div>
+        />
 
         <div
-          className={`relative w-full max-w-2xl bg-card border border-white/10 rounded-3xl shadow-2xl transition-all duration-500 transform overflow-hidden ${isSearchOpen ? "translate-y-0 scale-100" : "-translate-y-15 scale-95"}`}
+          className={`relative w-full max-w-2xl bg-card border border-white/10 rounded-3xl shadow-2xl transition-all duration-300 overflow-hidden ${isSearchOpen ? "translate-y-0 scale-100" : "-translate-y-4 scale-95"}`}
         >
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-bright flex items-center gap-2">
-                <Search size={20} className="text-primary" /> Search Anime
+              <h3 className="text-base font-bold text-bright flex items-center gap-2">
+                <Search size={18} className="text-primary" /> Search Anime
               </h3>
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="text-muted hover:text-bright"
+                className="text-muted hover:text-bright transition-colors"
               >
-                <X size={24} />
+                <X size={22} />
               </button>
             </div>
 
@@ -206,56 +210,55 @@ export default function Navbar() {
                 type="text"
                 placeholder="Type anime title..."
                 autoFocus={isSearchOpen}
-                className="w-full bg-background border-2 border-white/5 focus:border-primary/50 rounded-2xl py-4 pl-6 pr-14 outline-none text-bright text-lg transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-background border-2 border-white/5 focus:border-primary/50 rounded-2xl py-4 pl-6 pr-14 outline-none text-bright text-base transition-all"
               />
               {isSuggesting && (
                 <div className="absolute right-14 top-1/2 -translate-y-1/2">
-                  <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
               <button
                 type="submit"
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors"
               >
-                <Search size={24} />
+                <Search size={22} />
               </button>
             </form>
 
-            {/* --- LIST SUGGESTIONS --- */}
             {search.length >= 3 && (
-              <div className="mt-4 space-y-2 border-t border-white/5 pt-4 max-h-[400px] overflow-y-auto pr-2">
+              <div className="mt-4 space-y-1 border-t border-white/5 pt-4 max-h-[360px] overflow-y-auto">
                 {suggestions?.length > 0
                   ? suggestions.map((anime) => (
                       <div
                         key={anime.mal_id}
                         onClick={() => handleSelectSuggestion(anime.mal_id)}
-                        className="flex items-center gap-4 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-all group"
+                        className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-all group"
                       >
                         <img
                           src={anime.images.jpg.small_image_url}
-                          alt=""
-                          className="w-12 h-16 object-cover rounded-lg shadow-md"
+                          alt={anime.title}
+                          className="w-10 h-14 object-cover rounded-lg flex-shrink-0"
                         />
-                        <div className="flex-1">
-                          <h4 className="text-sm font-bold text-bright group-hover:text-primary transition-colors line-clamp-1">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-bold text-bright group-hover:text-primary transition-colors truncate">
                             {anime.title}
                           </h4>
-                          <div className="flex items-center gap-3 mt-1">
+                          <div className="flex items-center gap-2 mt-1">
                             <span className="flex items-center gap-1 text-[10px] text-yellow-400 font-bold">
-                              <Star size={10} fill="currentColor" />{" "}
+                              <Star size={9} fill="currentColor" />{" "}
                               {anime.score || "N/A"}
                             </span>
                             <span className="text-[10px] text-muted uppercase font-bold">
-                              {anime.type} • {anime.status}
+                              {anime.type} · {anime.status}
                             </span>
                           </div>
                         </div>
                       </div>
                     ))
                   : !isSuggesting && (
-                      <p className="text-center py-4 text-muted text-sm italic">
+                      <p className="text-center py-6 text-muted text-sm italic">
                         No results found for "{search}"
                       </p>
                     )}

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root {
+@theme {
   /* Cinematic Dark Theme Palette */
   --color-main: #0a0a0b;       /* Deep Black/Gray Background */
   --color-card: #2A3439;       /* Slightly lighter for cards */
@@ -8,20 +8,6 @@
   --color-primary: #e11d48;    /* Rose/Red Accent */
   --color-bright: #f8fafc;     /* Near White text */
   --color-muted: #94a3b8;      /* Grayish text for descriptions */
-}
-
-/* Custom Utilities for Anime Look */
-@layer components {
-  .bg-main { background-color: var(--color-main); }
-  .bg-card { background-color: var(--color-card); }
-  .bg-navbar { background-color: var(--color-navbar); }
-  .text-primary { color: var(--color-primary); }
-  .bg-primary { background-color: var(--color-primary); }
-  .text-bright { color: var(--color-bright); }
-  .text-muted { color: var(--color-muted); }
-  .border-primary { border-color: var(--color-primary); }
-  .bg-muted {background-color: var(--color-muted);}
-  .hover\:text-primary:hover {color: var(--color-primary);}
 }
 
 /* Smooth Scrolling for the whole app */

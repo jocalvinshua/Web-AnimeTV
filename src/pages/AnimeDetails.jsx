@@ -195,7 +195,7 @@ export default function AnimeDetails() {
                 <span
                   key={genre.mal_id}
                   onClick={() => handleGenreList(genre.mal_id, genre.name)}
-                  className="text-[10px] font-black uppercase tracking-wider text-primary border border-white/10 px-3 py-1 rounded-md bg-white/5 cursor-pointer hover:bg-primary hover:text-background hover:border-primary transition-all"
+                  className="text-[10px] font-black uppercase tracking-wider text-primary border border-white/10 px-3 py-1 rounded-md bg-white/5 cursor-pointer"
                 >
                   {genre.name}
                 </span>
@@ -271,9 +271,9 @@ export default function AnimeDetails() {
                           onClick={() =>
                             isAnime && navigate(`/anime-details/${item.mal_id}`)
                           }
-                          className={`flex items-center justify-between p-3 bg-card/40 hover:bg-card border border-white/5 rounded-xl transition-all duration-300 group h-[76px] ${
+                          className={`flex items-center justify-between p-3 bg-card/40 border border-white/5 rounded-xl transition-all duration-300 group h-[76px] ${
                             isAnime
-                              ? "cursor-pointer hover:border-primary/30 hover:ring-1 hover:ring-primary/20"
+                              ? "cursor-pointer hover:border-primary/30 hover:ring-1 hover:bg-card hover:ring-primary/20"
                               : "opacity-60 cursor-not-allowed"
                           }`}
                         >
@@ -281,7 +281,7 @@ export default function AnimeDetails() {
                             <span className="text-[9px] font-black uppercase tracking-wider text-primary/80 block truncate">
                               {group.relation}
                             </span>
-                            <h4 className="text-white font-bold text-xs truncate group-hover:text-primary transition-colors">
+                            <h4 className="text-white font-bold text-xs truncate transition-colors">
                               {item.name}
                             </h4>
                             <span className="text-[9px] text-muted font-bold uppercase tracking-wider block">
@@ -302,7 +302,6 @@ export default function AnimeDetails() {
               </div>
             )}
           </div>
-          {/* ── SISI KIRI: INFO & THEME (lg:col-span-4) ── */}
           <div className="lg:col-span-4 space-y-6">
             {/* Info Block (Tanpa Ikon) */}
             <div className="p-5 bg-card/40 backdrop-blur-sm border border-white/5 rounded-2xl shadow-xl space-y-3">
@@ -340,6 +339,7 @@ export default function AnimeDetails() {
             </div>
 
             {/* Theme Songs Block */}
+            {/* Theme Songs Block */}
             {((anime.theme?.openings && anime.theme.openings.length > 0) ||
               (anime.theme?.endings && anime.theme.endings.length > 0)) && (
               <div className="space-y-4 p-5 bg-card/20 border border-white/[0.02] rounded-2xl">
@@ -349,22 +349,38 @@ export default function AnimeDetails() {
 
                 {/* Openings */}
                 <div className="space-y-2">
-                  <h4 className="text-sm font-black uppercase tracking-widest text-primary">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-primary">
                     Opening Themes
                   </h4>
                   {anime.theme?.openings && anime.theme.openings.length > 0 ? (
                     <ul className="space-y-2 text-xs text-muted list-none">
-                      {anime.theme.openings.map((op, idx) => (
-                        <li key={idx} className="flex gap-2 items-start">
-                          <span className="font-bold text-primary/80 shrink-0">
-                            {idx + 1}.
-                          </span>
-                          <span className="leading-normal">{op}</span>
-                        </li>
-                      ))}
+                      {anime.theme.openings.map((op, idx) => {
+                        const searchQuery = encodeURIComponent(
+                          op.replace(/^\d+:\s*/, "") + " " + anime.title,
+                        );
+                        return (
+                          <li
+                            key={idx}
+                            className="flex gap-2 items-start group"
+                          >
+                            <span className="font-bold text-primary/80 shrink-0">
+                              {idx + 1}.
+                            </span>
+                            <a
+                              href={`https://www.youtube.com/results?search_query=${searchQuery}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="leading-normal hover:text-primary hover:underline transition-colors cursor-pointer"
+                              title="Cari di YouTube"
+                            >
+                              {op}
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   ) : (
-                    <p className="text-sm text-muted/50 italic">
+                    <p className="text-xs text-muted/50 italic">
                       No opening themes listed.
                     </p>
                   )}
@@ -372,22 +388,38 @@ export default function AnimeDetails() {
 
                 {/* Endings */}
                 <div className="space-y-2 pt-2 border-t border-white/5">
-                  <h4 className="text-sm font-black uppercase tracking-widest text-primary">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-primary">
                     Ending Themes
                   </h4>
                   {anime.theme?.endings && anime.theme.endings.length > 0 ? (
                     <ul className="space-y-2 text-xs text-muted list-none">
-                      {anime.theme.endings.map((ed, idx) => (
-                        <li key={idx} className="flex gap-2 items-start">
-                          <span className="font-bold text-muted shrink-0">
-                            {idx + 1}.
-                          </span>
-                          <span className="leading-normal">{ed}</span>
-                        </li>
-                      ))}
+                      {anime.theme.endings.map((ed, idx) => {
+                        const searchQuery = encodeURIComponent(
+                          ed.replace(/^\d+:\s*/, "") + " " + anime.title,
+                        );
+                        return (
+                          <li
+                            key={idx}
+                            className="flex gap-2 items-start group"
+                          >
+                            <span className="font-bold text-primary shrink-0">
+                              {idx + 1}.
+                            </span>
+                            <a
+                              href={`https://www.youtube.com/results?search_query=${searchQuery}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="leading-normal hover:text-primary hover:underline transition-colors cursor-pointer"
+                              title="Cari di YouTube"
+                            >
+                              {ed}
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   ) : (
-                    <p className="text-sm text-muted/50 italic">
+                    <p className="text-xs text-muted/50 italic">
                       No ending themes listed.
                     </p>
                   )}

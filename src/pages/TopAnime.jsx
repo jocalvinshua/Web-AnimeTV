@@ -25,7 +25,7 @@ export default function TopAnime() {
       {/* --- HERO / HEADER SECTION --- */}
       <div className="mb-12 text-center md:text-left md:items-end justify-between gap-6 border-b border-white/5 pb-8">
         <div>
-          <h1 className="text-4xl font-black uppercase tracking-tight italic flex items-center justify-center md:justify-start gap-3">
+          <h1 className="text-xl md:text-4xl font-black uppercase tracking-tight italic flex items-center justify-center md:justify-start gap-3">
             Top <span className="text-primary">Anime</span> Leaderboard
           </h1>
           <p className="text-muted text-sm mt-2">
@@ -49,13 +49,11 @@ export default function TopAnime() {
         </div>
       ) : topAnimeList && topAnimeList.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 justify-center">
             {topAnimeList.map((anime, index) => {
-              // Menghitung peringkat asli berdasarkan index dan halaman
               const globalRank =
                 anime.rank || (currentPage - 1) * 24 + (index + 1);
 
-              // Styling warna dinamis khusus untuk Top 3 besar
               const rankBadgeColor =
                 globalRank === 1
                   ? "bg-yellow-500 text-black font-black"
@@ -66,11 +64,11 @@ export default function TopAnime() {
                       : "bg-card/80 text-bright border border-white/10 backdrop-blur-md";
 
               return (
-                <div key={anime.mal_id} className="relative w-full group">
+                <div key={anime.mal_id} className="relative w-full group items-center justify-center">
                   <AnimeCard
                     anime={anime}
                     isLoading={false}
-                    isTopAnime={true}
+                    mode='top anime'
                     rank={globalRank}
                   />
                 </div>

@@ -8,6 +8,7 @@ import Anime from "./pages/Anime.jsx";
 import CollectionList from "./pages/CollectionList.jsx";
 import AnimeSchedule from "./pages/AnimeSchedule.jsx";
 import TopAnime from "./pages/TopAnime.jsx";
+import AnimeFavorites from "./pages/AnimeFavorites.jsx";
 export default function App() {
   return (
     <div className="min-h-screen bg-main text-bright flex flex-col">
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/anime/season/:season" element={<Anime />} />
           <Route path="/anime/season/:year/:season" element={<Anime />} />
           <Route path="/anime/movie" element={<Anime />} />
+          <Route path="/favorites" element={<AnimeFavorites />} />
 
           <Route path="/anime/:query?" element={<Anime />} />
 
